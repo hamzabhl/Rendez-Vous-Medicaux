@@ -9,4 +9,4 @@ $us = new UserService();
 $user = new User($nom, $prenom, $cin, $email, $telephone, $sexe, $dateNaissance, $password);
 $us->create($user);
 
-header("location:../index.php");
+header("location:../views/test.php");

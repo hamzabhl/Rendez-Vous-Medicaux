@@ -138,6 +138,9 @@
                             <h4 class="mb-2">Forgot Password? 🔒</h4>
                             <p class="mb-4">Enter your email and we'll send you instructions to reset your password</p>
                             <form id="formAuthentication" class="mb-3" action="../../controller/passwordController.php" method="POST">
+                                <div>
+                                    <input type="hidden" name="action" value="send_code" />
+                                </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input
@@ -148,9 +151,6 @@
                                         placeholder="Enter your email"
                                         autofocus
                                         />
-                                </div>
-                                <div>
-                                    <input type="hidden" name="action" value="send_code">
                                 </div>
                                 <button class="btn btn-primary d-grid w-100">Send Reset Link</button>
                             </form>

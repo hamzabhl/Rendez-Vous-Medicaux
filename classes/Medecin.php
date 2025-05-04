@@ -7,7 +7,8 @@ class Medecin extends User {
 
     private $adresse;
     private $numFix;
-    private $specialite; // objet Specialite
+    private $specialite;
+    private $isConfirmed;
 
     public function __construct($nom, $prenom, $cin, $email, $telephone, $sexe, $dateNaissance, $password, $adresse, $numFix, Specialite $specialite) {
         parent::__construct($nom, $prenom, $cin, $email, $telephone, $sexe, $dateNaissance, $password);
@@ -38,6 +39,14 @@ class Medecin extends User {
 
     public function setSpecialite(Specialite $specialite) {
         $this->specialite = $specialite;
+    }
+
+    public function getIsConfirmed() {
+        return $this->isConfirmed;
+    }
+
+    public function setIsConfirmed($isConfirmed) {
+        $this->isConfirmed = $isConfirmed;
     }
 
 }

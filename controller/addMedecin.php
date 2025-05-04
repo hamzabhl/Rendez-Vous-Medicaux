@@ -24,8 +24,9 @@ $medecin = new Medecin(
     $nom, $prenom, $cin, $email, $telephone, $sexe, $dateNaissance, $password,
     $adresse, $numFix, $specialite
 );
+$medecin->setIsConfirmed(0);
 
 $ms = new MedecinService();
 $ms->create($medecin);
 
-header('Location: ../index.php');
+header('Location: ../views/login.php');

@@ -141,7 +141,9 @@
 
                             <form id="formCodeVerify" class="mb-3" action="../../controller/passwordController.php" method="POST">
                                 <input type="hidden" name="action" value="verify_code">
-
+                                <div>
+                                    <input type="hidden" name="action" value="verify_code" />
+                                </div>
                                 <div class="mb-3">
                                     <label for="code" class="form-label">Code de vérification</label>
                                     <input
@@ -154,7 +156,6 @@
                                         required
                                         />
                                 </div>
-
                                 <button class="btn btn-primary d-grid w-100">Vérifier le code</button>
                             </form>
 

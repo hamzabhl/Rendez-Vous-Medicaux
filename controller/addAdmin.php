@@ -12,5 +12,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $adminService = new AdminService();
     $adminService->create($admin);
 
-    header("Location: ../test.php");
+    header("Location: ../views/test.php");
 }

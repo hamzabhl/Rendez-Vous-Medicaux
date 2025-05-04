@@ -3,6 +3,7 @@
 session_start();
 include_once '../racine.php';
 include_once RACINE . '/services/UserService.php';
+include_once RACINE . '/services/MedecinService.php';
 
 $email = $_POST['email'];
 $password = $_POST['password'];
@@ -20,18 +21,28 @@ if ($user && password_verify($password, $user->getPassword())) {
 
         switch ($role) {
             case 'admin':
-                header('Location: ../views/dashboard_admin.php');
+                header('Location: ../views/admin/Admin.php');
                 exit;
             case 'medecin':
-                header('Location: ../medecin/dashboard_medecin.php');
-                exit;
+                $ms = new MedecinService();
+                $medecin = $ms->findById($user->getId());
+                if ($medecin && $medecin->getIsConfirmed() === 1) {
+                    header('Location: ../views/Medecin/Medecin.php');
+                    exit;
+                } else {
+//                    echo "<script>alert('Votre compte est en attente de confirmation.'); window.location.href = '../views/login.php';</script>";
+//                    exit;
+                    header('Location: ../views/Login.php?error=2');
+                    exit;
+                }
             case 'patient':
-                header('Location: ../patient/dashboard_patient.php');
+                header('Location: ../views/Patient/Patient.php');
                 exit;
         }
     } else {
-        echo "<script>alert('Aucun rôle trouvé.'); window.location.href = '../admin/login.php';</script>";
+        echo "<script>alert('Aucun rôle trouvé.'); window.location.href = '../views/login.php';</script>";
     }
 } else {
-    echo "<script>alert('Identifiants incorrects'); window.location.href = '../login.php';</script>";
+    header('Location: ../views/Login.php?error=1');
+    exit;
 }

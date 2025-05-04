@@ -7,4 +7,4 @@ extract($_POST);
 $ss = new SpecialiteService();
 $ss->create(new Specialite(1, $nom));
 
-header("location:../index.php");
+header("location:../views/dashboard_admin.php");

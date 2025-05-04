@@ -1,6 +1,6 @@
 <?php
 
-include_once '../racine.php';
+include_once __DIR__ . '/../racine.php';
 include_once RACINE . '/classes/User.php';
 include_once RACINE . '/connexion/Connexion.php';
 include_once RACINE . '/dao/IDao.php';
@@ -127,6 +127,15 @@ class UserService implements IDao {
         }
 
         return null;
+    }
+
+    public function updatePassword($email, $newPassword) {
+        $query = "UPDATE Utilisateur SET password = :password WHERE email = :email";
+        $stmt = $this->connexion->getConnexion()->prepare($query);
+        return $stmt->execute([
+                    ':password' => $newPassword,
+                    ':email' => $email
+        ]);
     }
 
     public function findAllApi() {

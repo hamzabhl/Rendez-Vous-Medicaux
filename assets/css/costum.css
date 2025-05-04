@@ -1,0 +1,20 @@
+/* custom.css */
+.hover-shadow:hover {
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
+
+.role-card.selected {
+  border: 2px solid #696cff;
+  background-color: #f0f4ff;
+}
+
+body {
+  background: linear-gradient(to bottom right, #e0f7fa, #fdfcff);
+}
+
+.role-card.selected {
+  border: 2px solid #696cff;
+  background-color: #f0f4ff;
+}

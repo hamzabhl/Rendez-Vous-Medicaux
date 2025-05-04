@@ -1,6 +1,8 @@
 <?php
 
+include_once __DIR__ . '/../racine.php';
 include_once RACINE . '/classes/Patient.php';
+include_once RACINE . '/classes/User.php';
 include_once RACINE . '/connexion/Connexion.php';
 include_once RACINE . '/dao/IDao.php';
 
@@ -96,21 +98,13 @@ class PatientService implements IDao {
 //    }
 
     public function update($patient) {
-        $query = "UPDATE Patient SET 
-                nom = :nom, 
-                prenom = :prenom, 
-                email = :email, 
-                telephone = :telephone, 
-                password = :password 
-            WHERE id = :id";
-
+        $query = "UPDATE Utilisateur SET nom = :nom, prenom = :prenom, email = :email, telephone = :telephone WHERE id = :id";
         $req = $this->connexion->getConnexion()->prepare($query);
         return $req->execute([
-                    ':nom' => $patient->getNom(),
+                    ':nom' => $patient->getNom,
                     ':prenom' => $patient->getPrenom(),
                     ':email' => $patient->getEmail(),
                     ':telephone' => $patient->getTelephone(),
-                    ':password' => $patient->getPassword(),
                     ':id' => $patient->getId()
         ]);
     }

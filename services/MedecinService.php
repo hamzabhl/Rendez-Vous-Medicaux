@@ -1,5 +1,6 @@
 <?php
 
+include_once __DIR__ . '/../racine.php';
 include_once RACINE . '/classes/Medecin.php';
 include_once RACINE . '/classes/Specialite.php';
 include_once RACINE . '/connexion/Connexion.php';
@@ -39,14 +40,15 @@ class MedecinService implements IDao {
 
             // Step 2: insert into Medecin
             $stmtMedecin = $pdo->prepare("
-                INSERT INTO Medecin (user_id, adresse, numFix, specialite_id) 
-                VALUES (:user_id, :adresse, :numFix, :specialite_id)
+                INSERT INTO Medecin (user_id, adresse, numFix, specialite_id, is_confirmed) 
+                VALUES (:user_id, :adresse, :numFix, :specialite_id, :is_confirmed)
             ");
             $stmtMedecin->execute([
                 ':user_id' => $userId,
                 ':adresse' => $o->getAdresse(),
                 ':numFix' => $o->getNumFix(),
-                ':specialite_id' => $o->getSpecialite()->getId()
+                ':specialite_id' => $o->getSpecialite()->getId(),
+                ':is_confirmed' => $o->getIsConfirmed()
             ]);
 
             $pdo->commit();
@@ -66,7 +68,7 @@ class MedecinService implements IDao {
     public function findAll() {
         $query = "SELECT 
                     u.id AS medecin_id, u.nom, u.prenom, u.cin, u.email, u.telephone, u.sexe, u.dateNaissance, u.password,
-                    m.adresse, m.numFix, m.specialite_id,
+                    m.adresse, m.numFix, m.specialite_id, m.is_confirmed,
                     s.nom AS specialite_nom
                     FROM Medecin m
                     JOIN Utilisateur u ON m.user_id = u.id
@@ -82,6 +84,7 @@ class MedecinService implements IDao {
             $medecin = new Medecin(
                     $m['nom'], $m['prenom'], $m['cin'], $m['email'], $m['telephone'], $m['sexe'], $m['dateNaissance'], $m['password'], $m['adresse'], $m['numFix'], $specialite
             );
+            $medecin->setIsConfirmed($m['is_confirmed']);
 
             // Attribuer l'id
             $reflection = new ReflectionClass($medecin);
@@ -97,13 +100,13 @@ class MedecinService implements IDao {
 
     public function findById($id) {
         $query = "SELECT 
-                    u.nom, u.prenom, u.cin, u.email, u.telephone, u.sexe, u.dateNaissance, u.password,
-                    m.ville, m.adresse, m.numFix, m.specialite_id,
-                    s.nom AS specialite_nom
-                    FROM Medecin m
-                    JOIN Utilisateur u ON m.user_id = u.id
-                    JOIN Specialite s ON m.specialite_id = s.id
-                    WHERE m.id = :id";
+                u.id AS medecin_id, u.nom, u.prenom, u.cin, u.email, u.telephone, u.sexe, u.dateNaissance, u.password,
+                m.adresse, m.numFix, m.specialite_id, m.is_confirmed,
+                s.nom AS specialite_nom
+              FROM Medecin m
+              JOIN Utilisateur u ON m.user_id = u.id
+              JOIN Specialite s ON m.specialite_id = s.id
+              WHERE m.user_id = :id";  // <= correction ici aussi
 
         $req = $this->connexion->getConnexion()->prepare($query);
         $req->execute([':id' => $id]);
@@ -115,27 +118,62 @@ class MedecinService implements IDao {
         $specialite = new Specialite($m['specialite_id'], $m['specialite_nom']);
 
         $medecin = new Medecin(
-                $m['nom'], $m['prenom'], $m['cin'], $m['email'], $m['telephone'], $m['adresse'], $m['numFix'], $specialite
+                $m['nom'], $m['prenom'], $m['cin'], $m['email'], $m['telephone'], $m['sexe'], $m['dateNaissance'], $m['password'], $m['adresse'], $m['numFix'], $specialite
         );
+        $medecin->setIsConfirmed($m['is_confirmed']);
 
+        // Attribuer l’ID (nécessaire pour update)
         $reflection = new ReflectionClass($medecin);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
-        $property->setValue($medecin, $m['medecin_id']);
+        $property->setValue($medecin, $m['medecin_id']);  // <= car on l'a sélectionné !
 
         return $medecin;
     }
 
     public function update($o) {
-        $query = "UPDATE Medecin 
-                  SET adresse = :adresse, numFix = :numFix
-                  WHERE id = :id";
+        $pdo = $this->connexion->getConnexion();
+
+        try {
+            $pdo->beginTransaction();
+
+            // 1. Mise à jour dans la table utilisateur
+            $queryUser = "UPDATE utilisateur 
+                      SET email = :email, telephone = :telephone 
+                      WHERE id = :id";
+            $stmtUser = $pdo->prepare($queryUser);
+            $stmtUser->execute([
+                ':email' => $o->getEmail(),
+                ':telephone' => $o->getTelephone(),
+                ':id' => $o->getId()
+            ]);
+
+            // 2. Mise à jour dans la table medecin
+            $queryMedecin = "UPDATE medecin 
+                         SET adresse = :adresse, numFix = :numFix, is_confirmed = :is_confirmed 
+                         WHERE user_id = :id";
+            $stmtMedecin = $pdo->prepare($queryMedecin);
+            $stmtMedecin->execute([
+                ':adresse' => $o->getAdresse(),
+                ':numFix' => $o->getNumFix(),
+                ':is_confirmed' => $o->getIsConfirmed(),
+                ':id' => $o->getId()
+            ]);
+
+            $pdo->commit();
+            return true;
+        } catch (PDOException $e) {
+            $pdo->rollBack();
+            throw new Exception("Erreur lors de la mise à jour du médecin : " . $e->getMessage());
+        }
+    }
+
+    public function approve($medecin) {
+        $query = "UPDATE Medecin SET is_confirmed = :is_confirmed WHERE user_id = :id";
         $req = $this->connexion->getConnexion()->prepare($query);
         return $req->execute([
-                    ':adresse' => $o->getAdresse(),
-                    ':numFix' => $o->getNumFix(),
-                    ':specialite_id' => $o->getSpecialite()->getId(),
-                    ':id' => $o->getId()
+                    ':is_confirmed' => $medecin->getIsConfirmed(), // <-- pas `$o`
+                    ':id' => $medecin->getId()
         ]);
     }
 

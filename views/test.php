@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-include_once './racine.php';
+include_once '../racine.php';
 ?>
 <html lang="fr">
     <head>
@@ -9,7 +9,7 @@ include_once './racine.php';
         <title>Test</title>
     </head>
     <body>
-        <form action="controller/addSpecialite.php" method="POST">
+        <form action="../controller/addSpecialite.php" method="POST">
             <fieldset>
                 <legend><h2>Spécialité</h2></legend>
                 <table border="0">
@@ -34,7 +34,7 @@ include_once './racine.php';
             </thead>
             <tbody>
                 <?php
-                include_once RACINE . '/services/SpecialiteService.php';
+                include_once RACINE . '../services/SpecialiteService.php';
                 $ss = new SpecialiteService();
                 foreach ($ss->findAll() as $s) {
                     ?>
@@ -42,7 +42,7 @@ include_once './racine.php';
                         <td><?php echo $s->getId(); ?></td>
                         <td><?php echo $s->getNom(); ?></td>
                         <td>
-                            <a href="controller/deleteSpecialite.php?id=
+                            <a href="../controller/deleteSpecialite.php?id=
                                <?php echo $s->getId(); ?>">Supprimer</a> 
                         </td>
                     </tr>
@@ -52,7 +52,7 @@ include_once './racine.php';
 
         <br><br><br>
 
-        <form action="controller/addUser.php" method="POST">
+        <form action="../controller/addUser.php" method="POST">
             <fieldset>
                 <legend><h2>Utilisateur</h2></legend>
                 <table border="0">
@@ -110,13 +110,12 @@ include_once './racine.php';
                     <th>Email</th>
                     <th>Téléphone</th>
                     <th>Sexe</th>
-                    <th>Date Naissance</th>
                     <th>Supprimer</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                include_once RACINE . '/services/UserService.php';
+                include_once RACINE . '../services/UserService.php';
                 $us = new UserService();
                 foreach ($us->findAll() as $u) {
                     ?>
@@ -130,7 +129,7 @@ include_once './racine.php';
                         <td><?php echo $u->getSexe(); ?></td>
                         <td><?php echo $u->getDateNaissance(); ?></td>
                         <td>
-                            <a href="controller/deleteUser.php?id=
+                            <a href="../controller/deleteUser.php?id=
                                <?php echo $u->getId(); ?>">Supprimer</a>
                         </td>
                     </tr>
@@ -140,7 +139,7 @@ include_once './racine.php';
 
         <br><br><br>
 
-        <form action="controller/addAdmin.php" method="POST">
+        <form action="../controller/addAdmin.php" method="POST">
             <fieldset>
                 <legend><h2>Admin</h2></legend>
                 <table border="0">
@@ -204,7 +203,7 @@ include_once './racine.php';
             </thead>
             <tbody>
                 <?php
-                include_once RACINE . '/services/AdminService.php';
+                include_once RACINE . '../services/AdminService.php';
                 $as = new AdminService();
                 foreach ($as->findAll() as $a) {
                     ?>
@@ -218,7 +217,7 @@ include_once './racine.php';
                         <td><?php echo $a->getSexe(); ?></td>
                         <td><?php echo $a->getDateNaissance(); ?></td>
                         <td>
-                            <a href="controller/deleteAdmin.php?id=
+                            <a href="../controller/deleteAdmin.php?id=
                                <?php echo $a->getId(); ?>">Supprimer</a>
                         </td>
                     </tr>
@@ -228,7 +227,7 @@ include_once './racine.php';
 
         <br><br><br>
 
-        <form action="controller/addPatient.php" method="POST">
+        <form action="../controller/addPatient.php" method="POST">
             <fieldset>
                 <legend><h2>Patient</h2></legend>
                 <table border="0">
@@ -292,7 +291,7 @@ include_once './racine.php';
             </thead>
             <tbody>
                 <?php
-                include_once RACINE . '/services/PatientService.php';
+                include_once RACINE . '../services/PatientService.php';
                 $ps = new PatientService();
                 foreach ($ps->findAll() as $p) {
                     ?>
@@ -306,7 +305,7 @@ include_once './racine.php';
                         <td><?php echo $p->getSexe(); ?></td>
                         <td><?php echo $p->getDateNaissance(); ?></td>
                         <td>
-                            <a href="controller/deletePatient.php?id=
+                            <a href="../controller/deletePatient.php?id=
                                <?php echo $p->getId(); ?>">Supprimer</a>
                         </td>
                     </tr>
@@ -317,12 +316,12 @@ include_once './racine.php';
         <br><br><br>
 
         <?php
-        include_once 'services/SpecialiteService.php';
+        include_once '../services/SpecialiteService.php';
         $ss = new SpecialiteService();
         $specialites = $ss->findAll();
         ?>
         <!-- Formulaire d'inscription d'un médecin -->
-        <form action="controller/addMedecin.php" method="POST" enctype="multipart/form-data">
+        <form action="../controller/addMedecin.php" method="POST" enctype="multipart/form-data">
             <fieldset>
                 <legend><h2>Médecin</h2></legend>
                 <table border="0">
@@ -406,12 +405,13 @@ include_once './racine.php';
                     <th>Adresse</th>
                     <th>Num Fixe</th>
                     <th>Spécialité</th>
+                    <th>IsConfirmed</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                include_once RACINE . '/services/MedecinService.php';
+                include_once RACINE . '../services/MedecinService.php';
                 $ms = new MedecinService();
                 foreach ($ms->findAll() as $m) {
                     ?>
@@ -427,8 +427,9 @@ include_once './racine.php';
                         <td><?php echo $m->getAdresse(); ?></td>
                         <td><?php echo $m->getNumFix(); ?></td>
                         <td><?php echo $m->getSpecialite()->getNom(); ?></td>
+                        <td><?php echo $m->getIsConfirmed(); ?></td>
                         <td>
-                            <a href="controller/deleteMedecin.php?id=<?php echo $m->getId(); ?>">Supprimer</a>
+                            <a href="../controller/deleteMedecin.php?id=<?php echo $m->getId(); ?>">Supprimer</a>
                         </td>
                     </tr>
                 <?php } ?>

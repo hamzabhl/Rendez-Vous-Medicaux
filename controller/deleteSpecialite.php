@@ -7,4 +7,4 @@ extract($_GET);
 $is = new SpecialiteService();
 $is->delete($is->findById($id));
 
-header("location:../index.php");
+header("location:../views/dashboard_admin.php");

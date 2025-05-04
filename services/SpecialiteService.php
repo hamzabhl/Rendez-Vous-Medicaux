@@ -1,5 +1,6 @@
 <?php
 
+include_once __DIR__ . '/../racine.php';
 include_once RACINE . '/classes/Specialite.php';
 include_once RACINE . '/connexion/Connexion.php';
 include_once RACINE . '/dao/IDao.php';

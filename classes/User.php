@@ -23,7 +23,6 @@ class User {
         $this->password = $password;
     }
 
-    // Getters and Setters
     public function getId() {
         return $this->id;
     }
@@ -32,64 +31,68 @@ class User {
         return $this->nom;
     }
 
-    public function setNom($nom) {
-        $this->nom = $nom;
-    }
-
     public function getPrenom() {
         return $this->prenom;
-    }
-
-    public function setPrenom($prenom) {
-        $this->prenom = $prenom;
     }
 
     public function getCin() {
         return $this->cin;
     }
 
-    public function setCin($cin) {
-        $this->cin = $cin;
-    }
-
     public function getEmail() {
         return $this->email;
-    }
-
-    public function setEmail($email) {
-        $this->email = $email;
     }
 
     public function getTelephone() {
         return $this->telephone;
     }
 
-    public function setTelephone($telephone) {
-        $this->telephone = $telephone;
-    }
-
     public function getSexe() {
         return $this->sexe;
-    }
-
-    public function setSexe($sexe) {
-        $this->sexe = $sexe;
     }
 
     public function getDateNaissance() {
         return $this->dateNaissance;
     }
 
-    public function setDateNaissance($dateNaissance) {
-        $this->dateNaissance = $dateNaissance;
-    }
-
     public function getPassword() {
         return $this->password;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setNom($nom) {
+        $this->nom = $nom;
+    }
+
+    public function setPrenom($prenom) {
+        $this->prenom = $prenom;
+    }
+
+    public function setCin($cin) {
+        $this->cin = $cin;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+    public function setTelephone($telephone) {
+        $this->telephone = $telephone;
+    }
+
+    public function setSexe($sexe) {
+        $this->sexe = $sexe;
+    }
+
+    public function setDateNaissance($dateNaissance) {
+        $this->dateNaissance = $dateNaissance;
     }
 
     public function setPassword($password) {
         $this->password = $password;
     }
-
+    
 }

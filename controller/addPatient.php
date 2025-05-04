@@ -12,5 +12,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ps = new PatientService();
     $ps->create($patient);
 
-    header("Location: ../index.php");
+    header("Location: ../views/test.php");
 }

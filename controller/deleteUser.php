@@ -12,15 +12,4 @@ if (isset($_GET['id'])) {
     }
 }
 
-header("location:../index.php");
-
-
-
-//include_once '../racine.php';
-//include_once RACINE.'/services/SpecialiteService.php';
-//
-//extract($_GET);
-//
-//$ss = new SpecialiteService();
-//$ss->delete($ss->findById($id));
-
+header("location:../views/test.php");
